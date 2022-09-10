@@ -10,7 +10,7 @@ try:
 except Exception as ex:
          print("Exception:", ex)
 
-sqlcon.create_table()     
+sqlcon.create_table()
 # sqlcon.store_data(patients, 'patient')
 #
 #
