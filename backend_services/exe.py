@@ -28,3 +28,4 @@ def hash_identifiers():
 # more notes
 # https://www.tomshardware.com/how-to/create-python-executable-applications
 # https://www.geeksforgeeks.org/convert-python-script-to-exe-file/
+# https://stackoverflow.com/questions/27494758/how-do-i-make-a-python-script-executable
