@@ -17,7 +17,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 def index():
     if request.method == "POST":
 
-        # TODO: Add the user's entry into the database
+        # Add the user's entry into the database
         first_name = request.form.get("first name")
         last_name = request.form.get("last name")
         birthday = request.form.get("birthday (DD/MM/YYYY)")
@@ -26,7 +26,7 @@ def index():
         state = request.form.get("state")
         patient = Patient(first_name, last_name, birthday, address, city, state)
 
-        # Set up SQL connection
+        # Set up SQL connection and Store patient identifier information
         sqlcon = SQLPipeline()
         try:
             sqlcon.create_connection()
@@ -40,8 +40,9 @@ def index():
         return redirect("/")
 
     else:
-        # Store patient data retrieved into object
+        # Deliver patient name and EHR sales count
 
         # Display the inputed patient data in the database on index.html
-        sales_row = db.execute("SELECT name, sales_count FROM patient_sales")
-        print(sales_row)
+        first_name, last_name, id = db.execute("SELECT first_name, last_name, id FROM patients")
+        sales = db.execute('''SELECT sales_count from patient_sales WHERE patient_id = id FROM patient_sales VALUES(?)''', patient_id)
+        print(name, sales_row) #
