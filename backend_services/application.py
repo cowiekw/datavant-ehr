@@ -11,7 +11,7 @@ app = Flask(__name__)
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/update-patient", methods=["GET", "POST"])
 def index():
     patients_row=[]
     if request.method == "POST":
