@@ -38,7 +38,7 @@ def index():
         finally:
             sqlcon.save_changes()
         return render_template("index.html", patients = patients_row)
-    else:
+    else:  # GET
         patients = ['fake patient']
         try:
             sqlcon = SQLPipeline()
