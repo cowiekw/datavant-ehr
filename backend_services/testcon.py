@@ -5,14 +5,10 @@ from core.store_sql import SQLPipeline
 
 # Set up SQL connection and Store patient identifier information
 sqlcon = SQLPipeline()
-try:
-    sqlcon.create_connection()
-except Exception as ex:
-         print("Exception:", ex)
+sqlcon.create_connection()
+cur = sqlcon.conn.cursor()
+cur.execute("SELECT first_name, last_name, state FROM patients")
 
-sqlcon.create_table()
-# sqlcon.store_data(patients, 'patient')
-#
-#
-# finally:
-#     SQLCon.save_changes()
+patient_rows = cur.fetchall()
+print("row:", patient_rows)
+sqlcon.save_changes()

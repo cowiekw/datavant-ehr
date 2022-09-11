@@ -4,12 +4,12 @@
     <head>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
-        <title>Birthdays</title>
+        <title>Account</title>
 
     </head>
     <body>
         <div class="jumbotron">
-            <h1>User Infromationo </h1>
+            <h1>View your account information </h1>
         </div>
         <div class="container">
             <div class="section">
@@ -19,9 +19,10 @@
                 <form action = "/"  method = "post">
                     <input autocomplete="off" autofocus name="first_name" placeholder="First Name" type="text">
                     <input autocomplete="off" autofocus name="last_name" placeholder="Last Name" type="text">
+                    <input autocomplete="off" autofocus name="birthday" placeholder="Birthday (DD/MM/YYYY)" type="text">
                     <input autocomplete="off" autofocus name="address" placeholder="Street address" type="text">
                     <input autocomplete="off" autofocus name="city" placeholder="City" type="text">
-                    <input autocomplete="off" autofocus name="state" placeholder="state" type="text">
+                    <input autocomplete="off" autofocus name="state" placeholder="State" type="text">
                     <input type="submit" value="Submit">
                 </form>
 
@@ -33,18 +34,19 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Birthday</th>
+                            <th> First Name </th>
+                            <th> Last Name </th>
+                            <th> State</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- TODO: Loop through the database entries to display them in this table -->
-                    {% for person in patients%}
+                    {% for per in patient_rows %}
                     <tr>
-                        <td> {{person.last_name}} </td>
-                        <td>{{person.city}} / {{person.state}} </td>
+                        <td> {{per.first_name}} </td>
+                        <td> {{per.last_name}} </td>
+                        <td> {{per.state}} </td>
                     </tr>
-
                     {% endfor %}
                     </tbody>
                 </table>
