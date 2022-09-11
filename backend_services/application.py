@@ -74,7 +74,7 @@ def get_sales_count(patient_record):  # Find the sales count for the patient
 @app.route("/")
 def index():
     email = dict(session).get('email', None) # Return none if there's no email
-    return render_template("index.html", email=email)
+    return render_template("index.html")
 
 @app.route('/login')
 def login():
@@ -103,7 +103,9 @@ def logout():
     return redirect('/') # redirect home
 
 @app.route("/account", methods=["GET", "POST"])
+@login_required
 def account():
+    email = dict(session).get('email', None)
     if request.method == "POST":
         # ADD USER: Add the user's entry into the database
         first_name = request.form.get("first_name")
