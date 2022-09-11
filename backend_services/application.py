@@ -1,8 +1,50 @@
 import sqlite3
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, flash,  url_for, jsonify, redirect, render_template, request, session
+from authlib.integrations.flask_client import OAuth
+import os
 from werkzeug.exceptions import abort
+from datetime import timedelta
 from core.store_sql import SQLPipeline
 from core.patient import Patient
+from auth_decorator import login_required # decorator for routes that should be accessible only by logged in users
+
+# dotenv setup
+from dotenv import load_dotenv
+load_dotenv()
+
+# Configure application
+app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True  # Ensure templates are auto-reloaded
+
+app.secret_key = os.getenv("APP_SECRET_KEY")
+app.config['SESSION_COOKIE_NAME'] = 'google-login-session'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
+
+
+#oauth config
+def fetch_token(name, request):
+    token = OAuth2Token.find(
+        name=name,
+        user=request.user
+    )
+    return token.to_token()
+
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id=os.getenv("GOOGLE_CLIENT_ID"), # from google Developer account
+    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    access_token_params=None,
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    authorize_params=None,
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',  # This is only needed if using openId to fetch user info
+    # server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid profile email'}, # Scope is what Google returns
+    fetch_token=fetch_token,
+    jwks_uri="https://www.googleapis.com/oauth2/v3/certs"
+)
 
 def get_db_conn():
     sqlcon = SQLPipeline()
@@ -29,21 +71,39 @@ def get_sales_count(patient_record):  # Find the sales count for the patient
                             (patient_record.id)).fetchone()
     return sales_count
 
-# Configure application
-app = Flask(__name__)
-
-# Ensure templates are auto-reloaded
-app.config["TEMPLATES_AUTO_RELOAD"] = True
-
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def index():
-    if request.method == "POST":
-        return redirect("/")
-    elif request.method == "GET":
-        return render_template("index.html")
+    email = dict(session).get('email', None) # Return none if there's no email
+    return render_template("index.html", email=email)
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
+@app.route('/login')
+def login():
+    google = oauth.create_client('google')
+    redirect_uri = url_for('authorize', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route('/authorize')
+def authorize():
+    google = oauth.create_client('google')
+    token = google.authorize_access_token()
+    resp = google.get('userinfo',token=token) # User info contains name, email, picture profil
+    user_info = resp.json()
+    user = oauth.google.userinfo()  # uses openid endpoint to fetch user info
+    # resp.raise_for_status()
+    # do something with the token and profile
+    session['email']=user_info['email']
+    session['profile'] = user_info
+    session.permanent = True  # make the session permanant so it keeps existing after broweser gets closed
+    return redirect('/')
+
+@app.route('/logout')
+def logout():
+    for key in list(session.keys()):
+        session.pop(key) # Remove each key in the session
+    return redirect('/') # redirect home
+
+@app.route("/account", methods=["GET", "POST"])
+def account():
     if request.method == "POST":
         # ADD USER: Add the user's entry into the database
         first_name = request.form.get("first_name")
@@ -73,12 +133,12 @@ def register():
         print("row:", patient_rows)
         # sales = cur.execute('''SELECT sales_count from patient_sales WHERE patient_id = id FROM patient_sales VALUES(?)''', patient_id)
 
-        return render_template("register.html")
+        return render_template("account.html")
         sqlcon.save_changes() # Close the connection
 
-
-@app.route("/account", methods=["GET", "POST"])
-def account(patient_rows=None):
+@app.route("/mydata", methods=["GET", "POST"])
+@login_required # decorate that redirects user to login.
+def mydata(patient_rows=None):
     patients_row='fake_patient'
     if request.method == "POST":
         return redirect("/account")
@@ -94,7 +154,7 @@ def account(patient_rows=None):
         print("row:", patient_rows)
         # sales = cur.execute('''SELECT sales_count from patient_sales WHERE patient_id = id FROM patient_sales VALUES(?)''', patient_id)
 
-        return render_template("account.html", patient_rows=patient_rows)
+        return render_template("mydata.html", patient_rows=patient_rows)
         sqlcon.save_changes() # Close the connection
 
 
