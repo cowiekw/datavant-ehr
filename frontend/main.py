@@ -17,3 +17,16 @@ def about():
 @app.route('/test/')
 def testing_template():
     return render_template('index.html')
+
+
+
+
+
+#REAL SHIT
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
+
+@app.route('/home')
+def home_page():
+    return render_template('homepage.html')
