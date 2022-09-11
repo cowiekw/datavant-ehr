@@ -13,6 +13,7 @@ class SQLPipeline:
         print("SQL connection created")
         self.conn = sqlite3.connect(('{0}.db').format(self.db_name))
         self.conn.row_factory = sqlite3.Row
+        cur  = self.conn.cursor()
 
     def create_table(self):
         cur= self.conn.cursor()
