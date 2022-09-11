@@ -15,3 +15,5 @@ pip install Authlib
 pip install Authlib requests
 pip install Authlib Flask
 pip install python-dotenv
+
+https://stackoverflow.com/questions/2862590/how-to-replace-master-branch-in-git-entirely-from-another-branch
