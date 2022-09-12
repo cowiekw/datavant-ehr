@@ -185,7 +185,7 @@ def about():
 @app.route("/payment")
 @login_required
 def payment():
-    return render_template("payment.html")
+    return render_template("payment.html", key=stripe.api_key)
 
 @app.route('/charge', methods=['POST'])
 def charge():

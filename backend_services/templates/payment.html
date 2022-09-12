@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Purchase access to your health records use history {% endblock %}</h1>
+    <h1>{% block title %} Purchase access to more of your health records use history {% endblock %}</h1>
 
-    <form action="/charge" method="post">
+    <form action="/" method="post">
    <article>
      <label>
        <span>Amount is $1.00 to view your health records use history</span>
@@ -17,5 +17,5 @@
            data-locale="auto"></script>
   </form>
 
-    <a href="{{ url_for('/')}}">return home</a>
+    <a href="{{ url_for('payment')}}">return home</a>
 {% endblock %}
