@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Purchase access to your health records use history {% endblock %}</h1>
+
+    <form action="/charge" method="post">
+   <article>
+     <label>
+       <span>Amount is $1.00 to view your health records use history</span>
+     </label>
+   </article>
+
+   <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+           data-key="{{ key }}"
+           data-description="A Flask Charge"
+           data-amount="1000"
+           data-locale="auto"></script>
+  </form>
+
+    <a href="{{ url_for('/')}}">return home</a>
+{% endblock %}

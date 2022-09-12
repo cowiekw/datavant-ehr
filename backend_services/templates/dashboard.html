@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} View sales of your heath data and your contributions to research {% endblock %}</h1>
+    <div class="section">
+        <h2>See the hosptals selling your health data </h2>
+        <table>
+            <thead>
+                <tr>
+                    <th> Purchaser  </th>
+                    <th> Seller (Hospital or health system) </th>
+                    <th> Sales Date</th>
+                    <th> Revenue (USD) </th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- TODO: Loop through the database entries to display them in this table -->
+            {% for s in sales_rows %}
+            <tr>
+                <td> {{s.project}} </td>
+                <td> {{s.seller}} </td>
+                <td> {{s.sales_date} </td>
+                <td> {{s.revenue} </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+  </div>
+
+  {% endblock %}

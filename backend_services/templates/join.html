@@ -4,13 +4,15 @@
     <h1>{% block title %} Enter your information to find your health data sales history {% endblock %}</h1>
         <div class="container">
             <div class="section">
-                <h2>Add your name and information</h2>
+                <body>
+                Would you like researchers insitutions to contact you about purchasing your EHR data?
+                Add your name and information to join our directory of patients selling data.
+              </body>
                 <!-- TODO: Create a form for users to submit a name, a month, and a day -->
-                <form action = "/"  method = "post">
+                <form action = "/join"  method = "post">
                     <input autocomplete="off" autofocus name="first_name" placeholder="First Name" type="text">
                     <input autocomplete="off" autofocus name="last_name" placeholder="Last Name" type="text">
-                    <input autocomplete="off" autofocus name="birthday" placeholder="Birthday (DD/MM/YYYY)" type="text">
-                    <input autocomplete="off" autofocus name="address" placeholder="Street address" type="text">
+                    <input autocomplete="off" autofocus name="age" placeholder="Age" type="text">
                     <input autocomplete="off" autofocus name="city" placeholder="City" type="text">
                     <input autocomplete="off" autofocus name="state" placeholder="State" type="text">
                     <input type="submit" value="Submit">
@@ -18,11 +20,6 @@
 
             </div>
 
-            <div class="section">
-                <body>
-                  <a class="nav-link" href="{{ url_for('logout')}}">Log out of my account</a>
-                  <body>
-            </div>
         </div>
 
 {% endblock %}
