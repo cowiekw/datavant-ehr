@@ -100,7 +100,7 @@ def authorize():
     user = oauth.google.userinfo()  # uses openid endpoint to fetch user info
     # resp.raise_for_status()
     # do something with the token and profile
-    session['id'], session['name'],session['email'] =user_info['id'], user_info['name'], user_info['email']
+    session['id'], session['name'],session['email'] = user_info['id'], user_info['name'], user_info['email']
     session['profile'] = user_info
     session.permanent = True  # make the session permanant so it keeps existing after broweser gets closed
     user = User(session['id'], session['name'], session['email']) # Store authenticated user object
@@ -139,14 +139,6 @@ def join(): # TO DO: change this page, so it's a sign up for sharing public data
         return redirect("/directory")
 
     elif request.method == "GET":
-
-        # sqlcon = get_db_conn()
-        # print("get connection created")
-        # cur = sqlcon.conn.cursor()
-        # cur.execute("SELECT first_name, last_name, age city, state, email FROM patients")
-        # patient_rows = cur.fetchall()
-        # print("row:", patient_rows)
-        # sqlcon.save_changes() # Close the connection
         return render_template("join.html")
 
 # Create a directory to view data that is being share with researchers
@@ -169,11 +161,12 @@ def directory():
 # Create a dashboard to view Sales of your health data
 @app.route("/dashboard", methods=["GET"])
 @login_required
+
 def dashboard():
     sales_row =[]
     sqlcon = get_db_conn()
     cur = sqlcon.conn.cursor()
-    cur.execute('''SELECT project, seller, sales_date, revenue FROM research_contrubitions WHERE user_id = VALUES(?)''', session['user_id'])
+    cur.execute('''SELECT project, seller, sales_date, revenue FROM research_contributions''')
     sales_rows = cur.fetchall()
     return render_template("dashboard.html", sales_rows=sales_rows)
     sqlcon.save_changes() # Close the connection

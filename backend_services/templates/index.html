@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Welcome to Health Data Exchange {% endblock %}</h1>
-
-
-    <a href="{{ url_for('login')}}">Login</a>
+    <h1>{% block title %} Welcome to Health Datagram {% endblock %}</h1>
 
     <body>
-      <a class="nav-link" href="{{ url_for('logout')}}">Log out of my account</a>
-      <body>
+      <ul>
+        <li>Be informed when your medical record data is being shared with data brokers.</li>
+        <li>Gain insights into how often your data is being shared for use in clinical trial research.</li>
+        <li>Get compensated for the use of your data </li>
+        <li>Discover more research opportunites by joining our research directory</li>
+      </ul>
+    </body>
+      <footer>
+        <a class="nav-link" href="{{ url_for('logout')}}">Log out of my account</a>
+        </footer>
 {% endblock %}
